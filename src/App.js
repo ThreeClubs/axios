@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import { useState, useEffect } from "react";
 
-function App() {
+export default function App() {
+  const [user, setUsers] = useState([]);
+  const [poke, setPoke] = useState([]);
+
+  useEffect(() => {
+    axios.get("https://reqres.in/api/users").then((res) => {
+      setUsers(res.data.data);
+    });
+    axios.get(" https://pokeapi.co/api/v2/pokemon").then((res) => {
+      setPoke(res.data.results);
+    });
+  }, []);
+
+  
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        {user.map((user, index) => (
+          <div id="userDisplay" key={index}>
+            <h3>
+              {user.first_name} {user.last_name}
+            </h3>
+            <img alt="profile-pic" src={user.avatar}></img>
+          </div>
+        ))}
+      </div>
+      <ul>
+        {poke.map((pokeObj, index) => (
+          <li key={index}>
+            {pokeObj.name} 
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
-
-export default App;
